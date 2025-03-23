@@ -1,0 +1,28 @@
+<!-- templates/results.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analysis Results</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <style>
+        .status { font-size: 1.5em; margin-right: 10px; }
+        .card { padding: 15px; margin: 10px 0; border-left: 4px solid; }
+        .high { border-color: #ff4444; }
+        .medium { border-color: #ffbb33; }
+        .low { border-color: #00C851; }
+    </style>
+</head>
+<body>
+    <h1>Analysis for: {{ url }}</h1>
+    <a href="/">← New Scan</a>
+    
+    {% for result in results %}
+    <div class="card {{ result.severity }}">
+        <span class="status">{{ result.status }}</span>
+        <strong>{{ result.header }}</strong>
+        <p>Current Value: <code>{{ result.value }}</code></p>
+        <p>Recommended: <code>{{ result.recommended }}</code></p>
+    </div>
+    {% endfor %}
+</body>
+</html>
