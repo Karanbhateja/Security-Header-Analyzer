@@ -1,3 +1,4 @@
+<!-- templates/results.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,11 +6,36 @@
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <style>
         .status { font-size: 1.5em; margin-right: 10px; }
-        .card { padding: 15px; margin: 10px 0; border-left: 4px solid; }
-        .high { border-color: #ff4444; background: #ffe6e6; }
-        .medium { border-color: #ffbb33; background: #fff3d9; }
-        .low { border-color: #00C851; background: #e6ffe6; }
-        .warning { background: #fff3cd; padding: 1rem; }
+        .card { 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-left: 4px solid;
+            border-radius: 5px;
+            color: #333; /* Dark text color */
+        }
+        .high { 
+            border-color: #dc3545;
+            background: #f8d7da; /* Light red background */
+        }
+        .medium { 
+            border-color: #ffc107;
+            background: #fff3cd; /* Light yellow background */
+        }
+        .low { 
+            border-color: #28a745;
+            background: #d4edda; /* Light green background */
+        }
+        code {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        h1 {
+            color: #2c3e50; /* Dark blue for headings */
+        }
+        body {
+            color: #34495e; /* Dark gray for body text */
+        }
     </style>
 </head>
 <body>
