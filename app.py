@@ -1,36 +1,12 @@
-# app.py
-from flask import Flask, render_template, request, jsonify
+# app.py (updated)
+from flask import Flask, render_template, request
 import requests
 from urllib.parse import urlparse
 
 app = Flask(__name__)
 
-# Security headers to check with their recommended values
-HEADER_CHECKS = {
-    'Content-Security-Policy': {
-        'recommended': "default-src 'self'",
-        'severity': 'high'
-    },
-    'Strict-Transport-Security': {
-        'recommended': "max-age=31536000; includeSubDomains",
-        'severity': 'high'
-    },
-    'X-Content-Type-Options': {
-        'recommended': "nosniff",
-        'severity': 'medium'
-    },
-    'X-Frame-Options': {
-        'recommended': "DENY",
-        'severity': 'medium'
-    },
-    'X-XSS-Protection': {
-        'recommended': "1; mode=block",
-        'severity': 'medium'
-    },
-    'Referrer-Policy': {
-        'recommended': "no-referrer-when-downgrade",
-        'severity': 'low'
-    }
+HEADER_CHECKS = { 
+    # ... [keep existing HEADER_CHECKS configuration] ...
 }
 
 def validate_url(url):
@@ -38,6 +14,8 @@ def validate_url(url):
     parsed = urlparse(url)
     if not parsed.scheme:
         url = f"https://{url}"
+    if not parsed.netloc:
+        raise ValueError("Invalid URL format")
     return url
 
 def analyze_headers(url):
@@ -46,22 +24,8 @@ def analyze_headers(url):
         response = requests.get(url, timeout=10, allow_redirects=True)
         results = []
         
-        for header, config in HEADER_CHECKS.items():
-            header_value = response.headers.get(header, '')
-            status = '✅' if header_value else '❌'
-            
-            if header_value:
-                if header == 'Strict-Transport-Security' and 'max-age=0' in header_value:
-                    status = '⚠️'
-                    
-            results.append({
-                'header': header,
-                'status': status,
-                'value': header_value or 'Not found',
-                'recommended': config['recommended'],
-                'severity': config['severity']
-            })
-            
+        # ... [keep existing analysis logic] ...
+        
         return {'success': True, 'results': results}
     
     except Exception as e:
@@ -75,14 +39,19 @@ def index():
 def analyze():
     url = request.form.get('url')
     if not url:
-        return jsonify({'error': 'No URL provided'}), 400
+        return render_template('error.html', error="No URL provided")
     
     try:
         validated_url = validate_url(url)
         analysis = analyze_headers(validated_url)
-        return render_template('results.html', 
-                             url=validated_url,
-                             results=analysis['results'])
+        
+        if analysis['success']:
+            return render_template('results.html', 
+                                 url=validated_url,
+                                 results=analysis['results'])
+        else:
+            return render_template('error.html', error=analysis.get('error', 'Unknown error'))
+            
     except Exception as e:
         return render_template('error.html', error=str(e))
 
