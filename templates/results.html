@@ -6,69 +6,115 @@
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <style>
         body {
+            background: #f8f9fa;
+            color: #212529;
             max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            color: #2d3748;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
+
         h1 {
-            color: #2d3748;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 1rem;
+            color: #1a1a1a;
+            font-weight: 600;
             margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
         }
+
         .card {
+            background: #ffffff;
+            border-radius: 12px;
             padding: 1.5rem;
             margin: 1rem 0;
-            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             border-left: 4px solid;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
         }
-        .high { border-color: #e53e3e; }
-        .medium { border-color: #dd6b20; }
-        .low { border-color: #38a169; }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .high { border-color: #ff6b6b; }
+        .medium { border-color: #ff922b; }
+        .low { border-color: #51cf66; }
+
         .status {
             font-size: 1.4em;
             margin-right: 0.8rem;
         }
+
+        .high .status { color: #ff6b6b; }
+        .medium .status { color: #ff922b; }
+        .low .status { color: #51cf66; }
+
         code {
-            background: #f7fafc;
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-            border: 1px solid #e2e8f0;
-            font-family: monospace;
+            background: #f1f3f5;
+            padding: 0.25em 0.4em;
+            border-radius: 4px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.9em;
+            color: #495057;
         }
+
         a {
-            color: #2b6cb0;
+            color: #228be6;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             margin-bottom: 2rem;
         }
+
         a:hover {
             text-decoration: underline;
+        }
+
+        .warning {
+            background: #fff3bf;
+            color: #5c4400;
+            padding: 1rem;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <h1>Security Analysis: {{ url }}</h1>
-    <a href="/">← Perform New Scan</a>
+    <h1>Security Analysis Report: {{ url }}</h1>
+    <a href="/">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        New Scan
+    </a>
     
     {% if results %}
-        {% for result in results %}
-        <div class="card {{ result.severity }}">
-            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                <span class="status">{{ result.status }}</span>
-                <h3 style="margin: 0;">{{ result.header }}</h3>
+        <div class="results-container">
+            {% for result in results %}
+            <div class="card {{ result.severity }}">
+                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                    <span class="status">{{ result.status }}</span>
+                    <h3 style="margin: 0; color: #343a40;">{{ result.header }}</h3>
+                </div>
+                <div style="display: grid; gap: 0.5rem;">
+                    <div>
+                        <span style="color: #868e96;">Current Value:</span>
+                        <code>{{ result.value }}</code>
+                    </div>
+                    <div>
+                        <span style="color: #868e96;">Recommended:</span>
+                        <code>{{ result.recommended }}</code>
+                    </div>
+                </div>
             </div>
-            <p><strong>Current Value:</strong> <code>{{ result.value }}</code></p>
-            <p><strong>Recommended:</strong> <code>{{ result.recommended }}</code></p>
+            {% endfor %}
         </div>
-        {% endfor %}
     {% else %}
-        <div class="card" style="border-color: #cbd5e0;">
+        <div class="warning">
             <p>⚠️ No security headers detected</p>
-            <p>This website doesn't appear to have any security headers configured.</p>
+            <p style="margin: 0.5rem 0 0 0; color: #795600;">
+                This website doesn't have any standard security headers configured.
+            </p>
         </div>
     {% endif %}
 </body>
