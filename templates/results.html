@@ -1,4 +1,3 @@
-<!-- templates/results.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,30 +6,30 @@
     <style>
         .status { font-size: 1.5em; margin-right: 10px; }
         .card { padding: 15px; margin: 10px 0; border-left: 4px solid; }
-        .high { border-color: #ff4444; }
-        .medium { border-color: #ffbb33; }
-        .low { border-color: #00C851; }
-        .warning { background: #fff3cd; }
+        .high { border-color: #ff4444; background: #ffe6e6; }
+        .medium { border-color: #ffbb33; background: #fff3d9; }
+        .low { border-color: #00C851; background: #e6ffe6; }
+        .warning { background: #fff3cd; padding: 1rem; }
     </style>
 </head>
 <body>
     <h1>Analysis for: {{ url }}</h1>
     <a href="/">← New Scan</a>
     
-    {% if not results %}
+    {% if results %}
+        {% for result in results %}
+        <div class="card {{ result.severity }}">
+            <span class="status">{{ result.status }}</span>
+            <strong>{{ result.header }}</strong>
+            <p>Current Value: <code>{{ result.value }}</code></p>
+            <p>Recommended: <code>{{ result.recommended }}</code></p>
+        </div>
+        {% endfor %}
+    {% else %}
         <div class="warning">
-            <p>⚠️ No security headers found!</p>
+            <p>⚠️ No security headers detected!</p>
             <p>This website doesn't appear to have any security headers configured.</p>
         </div>
     {% endif %}
-    
-    {% for result in results %}
-    <div class="card {{ result.severity }}">
-        <span class="status">{{ result.status }}</span>
-        <strong>{{ result.header }}</strong>
-        <p>Current Value: <code>{{ result.value }}</code></p>
-        <p>Recommended: <code>{{ result.recommended }}</code></p>
-    </div>
-    {% endfor %}
 </body>
 </html>
