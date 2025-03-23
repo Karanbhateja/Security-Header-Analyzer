@@ -5,55 +5,69 @@
     <title>Analysis Results</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <style>
-        .status { font-size: 1.5em; margin-right: 10px; }
-        .card { 
-            padding: 15px; 
-            margin: 10px 0; 
-            border-left: 4px solid;
-            border-radius: 5px;
-            color: #333; /* Dark text color */
-        }
-        .high { 
-            border-color: #dc3545;
-            background: #f8d7da; /* Light red background */
-        }
-        .medium { 
-            border-color: #ffc107;
-            background: #fff3cd; /* Light yellow background */
-        }
-        .low { 
-            border-color: #28a745;
-            background: #d4edda; /* Light green background */
-        }
-        code {
-            background: rgba(0,0,0,0.1);
-            padding: 2px 5px;
-            border-radius: 3px;
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            color: #2d3748;
         }
         h1 {
-            color: #2c3e50; /* Dark blue for headings */
+            color: #2d3748;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
         }
-        body {
-            color: #34495e; /* Dark gray for body text */
+        .card {
+            padding: 1.5rem;
+            margin: 1rem 0;
+            background: #fff;
+            border-left: 4px solid;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .high { border-color: #e53e3e; }
+        .medium { border-color: #dd6b20; }
+        .low { border-color: #38a169; }
+        .status {
+            font-size: 1.4em;
+            margin-right: 0.8rem;
+        }
+        code {
+            background: #f7fafc;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            border: 1px solid #e2e8f0;
+            font-family: monospace;
+        }
+        a {
+            color: #2b6cb0;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Analysis for: {{ url }}</h1>
-    <a href="/">← New Scan</a>
+    <h1>Security Analysis: {{ url }}</h1>
+    <a href="/">← Perform New Scan</a>
     
     {% if results %}
         {% for result in results %}
         <div class="card {{ result.severity }}">
-            <span class="status">{{ result.status }}</span>
-            <strong>{{ result.header }}</strong>
-            <p>Current Value: <code>{{ result.value }}</code></p>
-            <p>Recommended: <code>{{ result.recommended }}</code></p>
+            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <span class="status">{{ result.status }}</span>
+                <h3 style="margin: 0;">{{ result.header }}</h3>
+            </div>
+            <p><strong>Current Value:</strong> <code>{{ result.value }}</code></p>
+            <p><strong>Recommended:</strong> <code>{{ result.recommended }}</code></p>
         </div>
         {% endfor %}
     {% else %}
-        <div class="warning">
-            <p>⚠️ No security headers detected!</p>
+        <div class="card" style="border-color: #cbd5e0;">
+            <p>⚠️ No security headers detected</p>
             <p>This website doesn't appear to have any security headers configured.</p>
         </div>
     {% endif %}
