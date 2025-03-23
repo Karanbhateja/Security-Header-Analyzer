@@ -10,11 +10,19 @@
         .high { border-color: #ff4444; }
         .medium { border-color: #ffbb33; }
         .low { border-color: #00C851; }
+        .warning { background: #fff3cd; }
     </style>
 </head>
 <body>
     <h1>Analysis for: {{ url }}</h1>
     <a href="/">← New Scan</a>
+    
+    {% if not results %}
+        <div class="warning">
+            <p>⚠️ No security headers found!</p>
+            <p>This website doesn't appear to have any security headers configured.</p>
+        </div>
+    {% endif %}
     
     {% for result in results %}
     <div class="card {{ result.severity }}">
