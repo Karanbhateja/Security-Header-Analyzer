@@ -1,0 +1,19 @@
+<!-- templates/error.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <style>
+        .error { color: #dc3545; padding: 20px; border: 1px solid #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>⚠️ Error</h1>
+    <div class="error">
+        <strong>Error message:</strong>
+        <p>{{ error }}</p>
+    </div>
+    <a href="/">← Try Again</a>
+</body>
+</html>
