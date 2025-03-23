@@ -25,25 +25,33 @@ def analyze_headers(url):
         results = []
         
         for header, config in HEADER_CHECKS.items():
-            header_value = response.headers.get(header, '')
+            # Case-insensitive header check
+            header_value = response.headers.get(header, '') or response.headers.get(header.lower(), '')
             status = '✅' if header_value else '❌'
             
+            # Special case checks
             if header_value:
-                if header == 'Strict-Transport-Security' and 'max-age=0' in header_value:
-                    status = '⚠️'
-                    
+                if header == 'Strict-Transport-Security':
+                    if 'max-age=0' in header_value:
+                        status = '⚠️ (HSTS Disabled)'
+                    elif 'max-age' not in header_value:
+                        status = '⚠️ (Missing max-age)'
+                        
+                if header == 'Content-Security-Policy' and "'unsafe-inline'" in header_value:
+                    status = '⚠️ (Contains unsafe-inline)'
+            
             results.append({
                 'header': header,
                 'status': status,
-                'value': header_value or 'Not found',
+                'value': header_value if header_value else 'Not found',
                 'recommended': config['recommended'],
                 'severity': config['severity']
             })
-        
+            
         return {'success': True, 'results': results}
     
     except Exception as e:
-        return {'success': False, 'error': str(e)}
+        return {'success': False, 'error': f"Failed to analyze headers: {str(e)}"}
 
 @app.route('/')
 def index():
