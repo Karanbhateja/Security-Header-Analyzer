@@ -24,7 +24,21 @@ def analyze_headers(url):
         response = requests.get(url, timeout=10, allow_redirects=True)
         results = []
         
-        # ... [keep existing analysis logic] ...
+        for header, config in HEADER_CHECKS.items():
+            header_value = response.headers.get(header, '')
+            status = '✅' if header_value else '❌'
+            
+            if header_value:
+                if header == 'Strict-Transport-Security' and 'max-age=0' in header_value:
+                    status = '⚠️'
+                    
+            results.append({
+                'header': header,
+                'status': status,
+                'value': header_value or 'Not found',
+                'recommended': config['recommended'],
+                'severity': config['severity']
+            })
         
         return {'success': True, 'results': results}
     
