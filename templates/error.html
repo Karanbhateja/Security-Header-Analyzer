@@ -1,18 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Error</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .error { color: #dc3545; padding: 20px; border: 1px solid #dc3545; }
+        .error-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 1rem;
+            border-left: 4px solid var(--danger);
+            margin: 2rem 0;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
-    <h1>⚠️ Error</h1>
-    <div class="error">
-        <strong>Error message:</strong>
-        <p>{{ error }}</p>
+    <div class="container">
+        <div class="error-card">
+            <div class="text-center">
+                <i class="fas fa-exclamation-triangle error-icon"></i>
+                <h2>Scan Failed</h2>
+                <p class="error-message">{{ error }}</p>
+            </div>
+            <a href="/" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Return to Scanner
+            </a>
+        </div>
     </div>
-    <a href="/">← Try Again</a>
 </body>
 </html>
