@@ -1,11 +1,10 @@
-version: '3.8'
-
 services:
-  web:
+  sec-head:
     build: .
     ports:
       - "5000:5000"
     restart: unless-stopped
+    container_name: sec-head
     environment:
       - FLASK_DEBUG=0
     volumes:
