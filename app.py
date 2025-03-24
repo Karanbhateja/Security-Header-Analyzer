@@ -57,10 +57,7 @@ def analyze_headers(url):
 
         # Convert headers to lowercase for case-insensitive comparison
         headers = {k.lower(): v for k, v in response.headers.items()}
-        print(f"\n[DEBUG] Headers received ({url}):")
-        for k, v in headers.items():
-            print(f"{k}: {v}")
-       
+        
         total_score = 0
         results = []
         
@@ -69,23 +66,22 @@ def analyze_headers(url):
             header_value = headers.get(header_lower, '')
             status = '✅' if header_value else '❌'
             score_change = 0
-
-            # Calculate score
             severity = config['severity']
+
             if header_value:
                 score_change = SCORE_CONFIG[severity]['present']
                 
-                # Special validations that reduce score
+                # Special validations
                 if header == 'Strict-Transport-Security':
                     if 'max-age=0' in header_value:
                         score_change = SCORE_CONFIG[severity]['absent']
                         status = '⚠️ (HSTS Disabled)'
                     elif 'max-age' not in header_value:
-                        score_change = int(SCORE_CONFIG[severity]['present'] * 0.5
+                        score_change = int(SCORE_CONFIG[severity]['present'] * 0.5)
                         status = '⚠️ (Missing max-age)'
                         
                 if header == 'Content-Security-Policy' and "'unsafe-inline'" in header_value:
-                    score_change = int(SCORE_CONFIG[severity]['present'] * 0.5
+                    score_change = int(SCORE_CONFIG[severity]['present'] * 0.5)
                     status = '⚠️ (Unsafe CSP)'
             else:
                 score_change = SCORE_CONFIG[severity]['absent']
@@ -115,6 +111,7 @@ def analyze_headers(url):
     except Exception as e:
         print(f"\n[ERROR] Analysis failed: {str(e)}")
         return {'success': False, 'error': f"Failed to analyze headers: {str(e)}"}
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -140,6 +137,6 @@ def analyze():
             
     except Exception as e:
         return render_template('error.html', error=str(e))
-        
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
