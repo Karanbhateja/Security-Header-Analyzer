@@ -31,6 +31,12 @@ HEADER_CHECKS = {
     }
 }
 
+SCORE_CONFIG = {
+    'high': {'present': 20, 'absent': -20},
+    'medium': {'present': 15, 'absent': -15},
+    'low': {'present': 10, 'absent': -10}
+}
+
 def validate_url(url):
     """Ensure URL has a valid scheme and format"""
     parsed = urlparse(url)
@@ -54,39 +60,61 @@ def analyze_headers(url):
         print(f"\n[DEBUG] Headers received ({url}):")
         for k, v in headers.items():
             print(f"{k}: {v}")
-
+       
+        total_score = 0
         results = []
         
         for header, config in HEADER_CHECKS.items():
             header_lower = header.lower()
             header_value = headers.get(header_lower, '')
             status = '✅' if header_value else '❌'
+            score_change = 0
 
-            # Special validations
+            # Calculate score
+            severity = config['severity']
             if header_value:
+                score_change = SCORE_CONFIG[severity]['present']
+                
+                # Special validations that reduce score
                 if header == 'Strict-Transport-Security':
                     if 'max-age=0' in header_value:
+                        score_change = SCORE_CONFIG[severity]['absent']
                         status = '⚠️ (HSTS Disabled)'
                     elif 'max-age' not in header_value:
+                        score_change = int(SCORE_CONFIG[severity]['present'] * 0.5
                         status = '⚠️ (Missing max-age)'
                         
                 if header == 'Content-Security-Policy' and "'unsafe-inline'" in header_value:
+                    score_change = int(SCORE_CONFIG[severity]['present'] * 0.5
                     status = '⚠️ (Unsafe CSP)'
+            else:
+                score_change = SCORE_CONFIG[severity]['absent']
+
+            total_score += score_change
 
             results.append({
                 'header': header,
                 'status': status,
                 'value': header_value or 'Not found',
                 'recommended': config['recommended'],
-                'severity': config['severity']
+                'severity': config['severity'],
+                'score_change': score_change
             })
 
-        return {'success': True, 'results': results}
+        # Calculate grade
+        total_score = max(0, min(100, total_score + 100))  # Convert to 0-100 scale
+        grade = 'A' if total_score >= 90 else 'B' if total_score >= 75 else 'C' if total_score >= 60 else 'D' if total_score >= 40 else 'F'
+
+        return {
+            'success': True,
+            'results': results,
+            'total_score': total_score,
+            'grade': grade
+        }
     
     except Exception as e:
         print(f"\n[ERROR] Analysis failed: {str(e)}")
         return {'success': False, 'error': f"Failed to analyze headers: {str(e)}"}
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -104,12 +132,14 @@ def analyze():
         if analysis['success']:
             return render_template('results.html', 
                                 url=validated_url,
-                                results=analysis['results'])
+                                results=analysis['results'],
+                                total_score=analysis['total_score'],
+                                grade=analysis['grade'])
         else:
             return render_template('error.html', error=analysis.get('error', 'Unknown error'))
             
     except Exception as e:
         return render_template('error.html', error=str(e))
-
+        
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
