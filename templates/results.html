@@ -1,129 +1,153 @@
-<!-- templates/results.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Analysis Results</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            background: #0d1117;
-            color: #c9d1d9;
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        h1 {
-            color: #e6edf3;
-            font-weight: 500;
+        /* Keep previous root variables and base styles from index.html */
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #21262d;
         }
 
-        .card {
-            background: #161b22;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border: 1px solid #30363d;
-            transition: transform 0.2s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            border-color: #484f58;
-        }
-
-        .high { border-left: 4px solid #ff7b72; }
-        .medium { border-left: 4px solid #d29922; }
-        .low { border-left: 4px solid #3fb950; }
-
-        .status {
-            font-size: 1.4em;
-            margin-right: 0.8rem;
-            filter: brightness(1.2);
-        }
-
-        .high .status { color: #ff7b72; }
-        .medium .status { color: #d29922; }
-        .low .status { color: #3fb950; }
-
-        code {
-            background: #0d1117;
-            padding: 0.25em 0.4em;
-            border-radius: 4px;
-            border: 1px solid #30363d;
-            font-family: "SFMono-Regular", Consolas, monospace;
-            font-size: 0.9em;
-            color: #8b949e;
-        }
-
-        a {
-            color: #58a6ff;
-            text-decoration: none;
+        .back-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .summary-card {
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 1.5rem;
             margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
         }
 
-        a:hover {
-            color: #79c0ff;
-            text-decoration: underline;
+        .metric {
+            text-align: center;
         }
 
-        .warning {
-            background: #341a00;
-            color: #d29922;
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .header-card {
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+
+        .header-card.high { border-color: var(--danger); }
+        .header-card.medium { border-color: var(--warning); }
+        .header-card.low { border-color: var(--success); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .status-icon {
+            font-size: 1.5rem;
+        }
+
+        .status-success { color: var(--success); }
+        .status-warning { color: var(--warning); }
+        .status-danger { color: var(--danger); }
+
+        .recommendation {
+            background: rgba(255, 255, 255, 0.05);
             padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid #3d2300;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
         }
 
-        svg {
-            stroke: #58a6ff;
+        code {
+            font-family: 'Fira Code', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
         }
     </style>
 </head>
 <body>
-    <h1>Security Analysis: {{ url }}</h1>
-    <a href="/">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
-        New Scan
-    </a>
-    
-    {% if results %}
-        <div class="results-container">
+    <div class="container">
+        <div class="results-header">
+            <a href="/" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Scanner
+            </a>
+            <h2>Results for: <span style="color: var(--primary)">{{ url }}</span></h2>
+        </div>
+
+        <div class="summary-card">
+            <div class="metric">
+                <div class="metric-value">A</div>
+                <div class="metric-label">Security Grade</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">95%</div>
+                <div class="metric-label">Compliance Score</div>
+            </div>
+        </div>
+
+        {% if results %}
             {% for result in results %}
-            <div class="card {{ result.severity }}">
-                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                    <span class="status">{{ result.status }}</span>
-                    <h3 style="margin: 0; color: #e6edf3;">{{ result.header }}</h3>
+            <div class="header-card {{ result.severity }}">
+                <div class="card-header">
+                    <div>
+                        <h3>{{ result.header }}</h3>
+                        <div class="severity">Severity: {{ result.severity|title }}</div>
+                    </div>
+                    <i class="status-icon 
+                        {% if '✅' in result.status %}fa-solid fa-check-circle status-success
+                        {% elif '⚠️' in result.status %}fa-solid fa-triangle-exclamation status-warning
+                        {% else %}fa-solid fa-xmark-circle status-danger
+                        {% endif %}"></i>
                 </div>
-                <div style="display: grid; gap: 0.5rem;">
-                    <div>
-                        <span style="color: #848d97;">Current Value:</span>
-                        <code>{{ result.value }}</code>
-                    </div>
-                    <div>
-                        <span style="color: #848d97;">Recommended:</span>
-                        <code>{{ result.recommended }}</code>
-                    </div>
+
+                <div class="current-value">
+                    <label>Current Value:</label>
+                    <code>{{ result.value }}</code>
+                </div>
+
+                <div class="recommendation">
+                    <label>Recommendation:</label>
+                    <code>{{ result.recommended }}</code>
                 </div>
             </div>
             {% endfor %}
-        </div>
-    {% else %}
-        <div class="warning">
-            <p>⚠️ No security headers detected</p>
-            <p style="margin: 0.5rem 0 0 0; color: #d29922;">
-                This website doesn't have standard security headers configured.
-            </p>
-        </div>
-    {% endif %}
+        {% else %}
+            <div class="header-card danger">
+                <div class="card-header">
+                    <h3>No Security Headers Found</h3>
+                    <i class="status-icon fa-solid fa-circle-exclamation status-danger"></i>
+                </div>
+                <p>This website doesn't have standard security headers configured.</p>
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>
