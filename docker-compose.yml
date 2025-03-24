@@ -7,5 +7,10 @@ services:
     container_name: sec-head
     environment:
       - FLASK_DEBUG=0
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'    # Limit to 50% of one CPU core
+          memory: 50M   # Limit memory usage to 256 MB
     volumes:
       - ./:/app
