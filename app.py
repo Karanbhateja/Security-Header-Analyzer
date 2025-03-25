@@ -1,8 +1,21 @@
+#V0.1.1 With rate Limiting
 from flask import Flask, render_template, request
 import requests
 from urllib.parse import urlparse
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
+
+# Rate limiter configuration
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://",
+    strategy="fixed-window",
+    headers_enabled=True
+)
 
 HEADER_CHECKS = {
     'Content-Security-Policy': {
@@ -113,10 +126,13 @@ def analyze_headers(url):
         return {'success': False, 'error': f"Failed to analyze headers: {str(e)}"}
 
 @app.route('/')
+@limiter.limit("10/minute")  # Basic protection for homepage
 def index():
     return render_template('index.html')
 
 @app.route('/analyze', methods=['POST'])
+@limiter.limit("5/minute", override_defaults=True)  # Stricter limit for analysis
+
 def analyze():
     url = request.form.get('url')
     if not url:
