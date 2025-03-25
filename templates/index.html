@@ -1,130 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Header Analyzer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --background: #0f172a;
-            --surface: #1e293b;
-            --text: #f8fafc;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background: var(--background);
-            color: var(--text);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(45deg, var(--primary), #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .scan-form {
-            background: var(--surface);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .input-group {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .url-input {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            background: #334155;
-            border: 2px solid #475569;
-            border-radius: 0.5rem;
-            color: var(--text);
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        .url-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .analyze-btn {
-            padding: 0.75rem 2rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .analyze-btn:hover {
-            opacity: 0.9;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 3rem;
-            color: #64748b;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Header Security Scanner</title>
+  <!-- Using a simple CSS framework for base styling -->
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+  <style>
+    /* Container styling for proper spacing and responsiveness */
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    /* Ensure form elements take full width on smaller devices */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input[type="text"] {
+      padding: 0.75rem;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 0.75rem;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: #6366f1;
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #4f46e5;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1 class="title">Security Header Analyzer</h1>
-            <p class="subtitle">Scan your website's security headers in seconds</p>
-        </header>
-
-        <form method="POST" action="/analyze" class="scan-form">
-            <div class="input-group">
-                <input 
-                    type="url" 
-                    name="url" 
-                    class="url-input"
-                    placeholder="https://example.com"
-                    required
-                >
-                <button type="submit" class="analyze-btn">
-                    <i class="fas fa-shield-alt"></i> Scan Now
-                </button>
-            </div>
-        </form>
-
-        <footer>
-            <p>Made with ❤️ by HackDeciphered</p>
-        </footer>
-    </div>
+  <div class="container">
+    <h1>Header Security Scanner</h1>
+    <form action="/analyze" method="POST">
+      <div>
+        <label for="url">Enter URL:</label>
+        <input type="text" id="url" name="url" placeholder="https://example.com" required>
+      </div>
+      <button type="submit">Scan Now</button>
+    </form>
+  </div>
 </body>
 </html>
