@@ -1,164 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scan Results</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --background: #0f172a;
-            --surface: #1e293b;
-            --text: #f8fafc;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan Results</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --background: #0f172a;
+      --surface: #1e293b;
+      --text: #f8fafc;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
 
-        body {
-            background: var(--background);
-            color: var(--text);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
+    body {
+      background: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
 
-        /* Add all styles from index.html here */
-        /* ... [paste all CSS from index.html's style section] ... */
+    /* Results-specific styles */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    /* Responsive adjustments for header */
+    @media (max-width: 600px) {
+      .results-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .results-header a.back-btn {
+        margin-bottom: 1rem;
+      }
+    }
 
-        /* Results-specific styles */
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
+    .summary-card {
+      background: var(--surface);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
 
-        .summary-card {
-            background: var(--surface);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
 
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
+    .header-card {
+      background: var(--surface);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid;
+    }
 
-        .header-card {
-            background: var(--surface);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid;
-        }
+    .header-card.high { border-color: var(--danger); }
+    .header-card.medium { border-color: var(--warning); }
+    .header-card.low { border-color: var(--success); }
 
-        .header-card.high { border-color: var(--danger); }
-        .header-card.medium { border-color: var(--warning); }
-        .header-card.low { border-color: var(--success); }
+    .status-icon {
+      font-size: 1.5rem;
+    }
 
-        .status-icon {
-            font-size: 1.5rem;
-        }
+    .status-success { color: var(--success); }
+    .status-warning { color: var(--warning); }
+    .status-danger { color: var(--danger); }
 
-        .status-success { color: var(--success); }
-        .status-warning { color: var(--warning); }
-        .status-danger { color: var(--danger); }
+    .recommendation {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+    }
 
-        .recommendation {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        code {
-            font-family: 'Fira Code', monospace;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-        }
-    </style>
+    code {
+      font-family: 'Fira Code', monospace;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="results-header">
-            <a href="/" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
-                Back to Scanner
-            </a>
-            <h2>Results for: <span style="color: var(--primary)">{{ url }}</span></h2>
-        </div>
-
-        <div class="summary-card">
-            <div class="metric">
-                <div class="metric-value">{{ grade }}</div>
-                <div class="metric-label">Security Grade</div>
-            </div>
-            <div class="metric">
-                <div class="metric-value">{{ total_score }}%</div>
-                <div class="metric-label">Compliance Score</div>
-            </div>
-        </div>
-
-        {% if results %}
-            {% for result in results %}
-            <div class="header-card {{ result.severity }}">
-                <div class="card-header">
-                    <div>
-                        <h3>{{ result.header }}</h3>
-                        <div class="severity">Severity: {{ result.severity|title }}</div>
-                    </div>
-                    <i class="status-icon 
-                        {% if '✅' in result.status %}fa-solid fa-check-circle status-success
-                        {% elif '⚠️' in result.status %}fa-solid fa-triangle-exclamation status-warning
-                        {% else %}fa-solid fa-xmark-circle status-danger
-                        {% endif %}"></i>
-                </div>
-
-                <div class="current-value">
-                    <label>Current Value:</label>
-                    <code>{{ result.value }}</code>
-                </div>
-
-                <div class="recommendation">
-                    <label>Recommendation:</label>
-                    <code>{{ result.recommended }}</code>
-                </div>
-
-                <div class="score-change">
-                    <small>Score Impact: {% if result.score_change > 0 %}+{% endif %}{{ result.score_change }}</small>
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <div class="header-card danger">
-                <div class="card-header">
-                    <h3>No Security Headers Found</h3>
-                    <i class="status-icon fa-solid fa-circle-exclamation status-danger"></i>
-                </div>
-                <p>This website doesn't have standard security headers configured.</p>
-            </div>
-        {% endif %}
+  <div class="container">
+    <div class="results-header">
+      <a href="/" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Scanner
+      </a>
+      <h2>Results for: <span style="color: var(--primary)">{{ url }}</span></h2>
     </div>
+
+    <div class="summary-card">
+      <div class="metric">
+        <div class="metric-value">{{ grade }}</div>
+        <div class="metric-label">Security Grade</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">{{ total_score }}%</div>
+        <div class="metric-label">Compliance Score</div>
+      </div>
+    </div>
+
+    {% if results %}
+      {% for result in results %}
+      <div class="header-card {{ result.severity }}">
+        <div class="card-header">
+          <div>
+            <h3>{{ result.header }}</h3>
+            <div class="severity">Severity: {{ result.severity|title }}</div>
+          </div>
+          <i class="status-icon 
+              {% if '✅' in result.status %}fa-solid fa-check-circle status-success
+              {% elif '⚠️' in result.status %}fa-solid fa-triangle-exclamation status-warning
+              {% else %}fa-solid fa-xmark-circle status-danger
+              {% endif %}"></i>
+        </div>
+
+        <div class="current-value">
+          <label>Current Value:</label>
+          <code>{{ result.value }}</code>
+        </div>
+
+        <div class="recommendation">
+          <label>Recommendation:</label>
+          <code>{{ result.recommended }}</code>
+        </div>
+
+        <div class="score-change">
+          <small>Score Impact: {% if result.score_change > 0 %}+{% endif %}{{ result.score_change }}</small>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="header-card danger">
+        <div class="card-header">
+          <h3>No Security Headers Found</h3>
+          <i class="status-icon fa-solid fa-circle-exclamation status-danger"></i>
+        </div>
+        <p>This website doesn't have standard security headers configured.</p>
+      </div>
+    {% endif %}
+  </div>
 </body>
 </html>
