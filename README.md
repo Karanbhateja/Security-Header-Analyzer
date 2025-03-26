@@ -1,5 +1,5 @@
 # Security-Header-Analyzer
-v0.1.1
+v0.2.0
 
 Added Rate Limiting
 Support For Mobile
