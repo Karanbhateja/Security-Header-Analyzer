@@ -1,4 +1,3 @@
-#V0.1.1 With rate Limiting
 from flask import Flask, render_template, request
 import requests
 from urllib.parse import urlparse
@@ -55,6 +54,7 @@ def validate_url(url):
     parsed = urlparse(url)
     if not parsed.scheme:
         url = f"https://{url}"
+        parsed = urlparse(url)
     if not parsed.netloc:
         raise ValueError("Invalid URL format")
     return url
@@ -84,7 +84,7 @@ def analyze_headers(url):
             if header_value:
                 score_change = SCORE_CONFIG[severity]['present']
                 
-                # Special validations
+                # Special validations for Strict-Transport-Security
                 if header == 'Strict-Transport-Security':
                     if 'max-age=0' in header_value:
                         score_change = SCORE_CONFIG[severity]['absent']
@@ -92,10 +92,31 @@ def analyze_headers(url):
                     elif 'max-age' not in header_value:
                         score_change = int(SCORE_CONFIG[severity]['present'] * 0.5)
                         status = '⚠️ (Missing max-age)'
-                        
-                if header == 'Content-Security-Policy' and "'unsafe-inline'" in header_value:
-                    score_change = int(SCORE_CONFIG[severity]['present'] * 0.5)
-                    status = '⚠️ (Unsafe CSP)'
+                
+                # Updated CSP logic
+                if header == 'Content-Security-Policy':
+                    # Split the header into directives and build a dictionary.
+                    csp_directives = header_value.lower().split(';')
+                    csp_dict = {}
+                    for d in csp_directives:
+                        d = d.strip()
+                        if d:
+                            parts = d.split()
+                            key = parts[0]
+                            values = parts[1:]
+                            csp_dict[key] = values
+
+                    default_src = csp_dict.get("default-src", [])
+                    # Accept as safe if default-src is set to either 'self' or 'none'
+                    if ("'self'" in default_src) or ("'none'" in default_src):
+                        if "'unsafe-inline'" in header_value:
+                            score_change = int(SCORE_CONFIG[severity]['present'] * 0.5)
+                            status = '⚠️ (Unsafe CSP - contains unsafe-inline)'
+                        else:
+                            status = '✅'
+                    else:
+                        score_change = SCORE_CONFIG[severity]['absent']
+                        status = '⚠️ (Potentially Unsafe CSP)'
             else:
                 score_change = SCORE_CONFIG[severity]['absent']
 
@@ -132,7 +153,6 @@ def index():
 
 @app.route('/analyze', methods=['POST'])
 @limiter.limit("5/minute", override_defaults=True)  # Stricter limit for analysis
-
 def analyze():
     url = request.form.get('url')
     if not url:
@@ -144,10 +164,10 @@ def analyze():
         
         if analysis['success']:
             return render_template('results.html', 
-                                url=validated_url,
-                                results=analysis['results'],
-                                total_score=analysis['total_score'],
-                                grade=analysis['grade'])
+                                   url=validated_url,
+                                   results=analysis['results'],
+                                   total_score=analysis['total_score'],
+                                   grade=analysis['grade'])
         else:
             return render_template('error.html', error=analysis.get('error', 'Unknown error'))
             
@@ -156,3 +176,4 @@ def analyze():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
