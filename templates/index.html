@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <!-- Essential Open Graph tags -->
   <meta property="og:title" content="Security Header Analyzer">
   <meta property="og:description" content="Scan your Website's Headers.">
@@ -19,9 +18,10 @@
       --background: #0f172a;
       --surface: #1e293b;
       --text: #f8fafc;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
+      --accent: #8b5cf6;
+      --card-bg: #273449;
+      --card-hover-bg: #2e3b54;
+      --transition: 0.3s ease;
     }
 
     * {
@@ -53,7 +53,7 @@
       font-size: 2.5rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
-      background: linear-gradient(45deg, var(--primary), #8b5cf6);
+      background: linear-gradient(45deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -63,6 +63,7 @@
       padding: 2rem;
       border-radius: 1rem;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
     }
 
     .input-group {
@@ -78,7 +79,7 @@
       border-radius: 0.5rem;
       color: var(--text);
       font-size: 1rem;
-      transition: border-color 0.2s;
+      transition: border-color var(--transition);
     }
 
     .url-input:focus {
@@ -94,17 +95,85 @@
       border-radius: 0.5rem;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: opacity var(--transition), transform var(--transition);
     }
 
     .analyze-btn:hover {
       opacity: 0.9;
+      transform: scale(1.02);
     }
 
     footer {
       text-align: center;
       margin-top: 3rem;
       color: #64748b;
+    }
+
+    /* Informational Section */
+    .info-section {
+      background: var(--surface);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    .info-section h2 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+      text-align: center;
+    }
+    .info-section p {
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .accordion {
+      display: grid;
+      gap: 1rem;
+    }
+    .accordion-item {
+      background: var(--card-bg);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
+    }
+    .accordion-item:hover {
+      transform: scale(1.02);
+      background-color: var(--card-hover-bg);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .accordion-header {
+      padding: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .accordion-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .accordion-header i {
+      transition: transform var(--transition);
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 1rem;
+      transition: max-height var(--transition);
+    }
+    .accordion-content p {
+      padding: 0.5rem 0 1rem;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    /* Checkbox hack for accordion */
+    input.accordion-toggle {
+      display: none;
+    }
+    input.accordion-toggle:checked ~ .accordion-content {
+      max-height: 200px;
+    }
+    input.accordion-toggle:checked ~ .accordion-header i {
+      transform: rotate(180deg);
     }
 
     /* Mobile responsiveness */
@@ -142,6 +211,80 @@
         </button>
       </div>
     </form>
+
+    <!-- Informational Section with Interactive Accordion -->
+    <div class="info-section">
+      <h2>What Does This Scanner Do?</h2>
+      <p>This tool analyzes the security headers of any website to provide insights into its protection against common web vulnerabilities. Explore the details below:</p>
+      <div class="accordion">
+        <!-- Content-Security-Policy -->
+        <div class="accordion-item">
+          <input type="checkbox" id="item1" class="accordion-toggle">
+          <label for="item1" class="accordion-header">
+            <h3>Content-Security-Policy (CSP)</h3>
+            <i class="fas fa-chevron-down"></i>
+          </label>
+          <div class="accordion-content">
+            <p>CSP specifies which resources the browser can load and execute. A well-configured CSP helps prevent cross-site scripting (XSS) and code injection attacks by restricting the sources for scripts, styles, and other content.</p>
+          </div>
+        </div>
+        <!-- Strict-Transport-Security -->
+        <div class="accordion-item">
+          <input type="checkbox" id="item2" class="accordion-toggle">
+          <label for="item2" class="accordion-header">
+            <h3>Strict-Transport-Security (HSTS)</h3>
+            <i class="fas fa-chevron-down"></i>
+          </label>
+          <div class="accordion-content">
+            <p>HSTS forces browsers to use HTTPS, ensuring that all communications are encrypted. This helps protect against man-in-the-middle attacks and secures data in transit.</p>
+          </div>
+        </div>
+        <!-- X-Content-Type-Options -->
+        <div class="accordion-item">
+          <input type="checkbox" id="item3" class="accordion-toggle">
+          <label for="item3" class="accordion-header">
+            <h3>X-Content-Type-Options</h3>
+            <i class="fas fa-chevron-down"></i>
+          </label>
+          <div class="accordion-content">
+            <p>This header prevents browsers from MIME type sniffing, ensuring that the server-declared content type is followed. It reduces the risk of executing malicious code if the content type is misinterpreted.</p>
+          </div>
+        </div>
+        <!-- X-Frame-Options -->
+        <div class="accordion-item">
+          <input type="checkbox" id="item4" class="accordion-toggle">
+          <label for="item4" class="accordion-header">
+            <h3>X-Frame-Options</h3>
+            <i class="fas fa-chevron-down"></i>
+          </label>
+          <div class="accordion-content">
+            <p>This header controls whether your website can be embedded within an iframe, protecting against clickjacking attacks.</p>
+          </div>
+        </div>
+        <!-- X-XSS-Protection -->
+        <div class="accordion-item">
+          <input type="checkbox" id="item5" class="accordion-toggle">
+          <label for="item5" class="accordion-header">
+            <h3>X-XSS-Protection</h3>
+            <i class="fas fa-chevron-down"></i>
+          </label>
+          <div class="accordion-content">
+            <p>This header enables the browser’s built-in XSS filtering mechanisms, providing an extra layer of defense against cross-site scripting attacks.</p>
+          </div>
+        </div>
+        <!-- Referrer-Policy -->
+        <div class="accordion-item">
+          <input type="checkbox" id="item6" class="accordion-toggle">
+          <label for="item6" class="accordion-header">
+            <h3>Referrer-Policy</h3>
+            <i class="fas fa-chevron-down"></i>
+          </label>
+          <div class="accordion-content">
+            <p>Controls how much referrer information is sent with requests. A strict policy helps protect user privacy by limiting the data shared when users navigate away from your site.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer>
       <p>Made with ❤️ by HackDeciphered</p>
