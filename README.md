@@ -1,7 +1,4 @@
 # Security-Header-Analyzer
-v0.2.0
+v0.2.1
 
-Added Rate Limiting
-Support For Mobile
-Added Preview Thumbnail
-Added default-src 'none' (or 'self') in CSP
+Added Hover effects on Cards of Index.html
