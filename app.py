@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Rate limiter configuration
 limiter = Limiter(
     app=app,
-    key_func=get_remote_address,
+    key_func=lambda: request.headers.get('CF-Connecting-IP', request.remote_addr),
     default_limits=["200 per day", "50 per hour"],
     storage_uri="memory://",
     strategy="fixed-window",
