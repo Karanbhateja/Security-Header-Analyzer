@@ -1,22 +1,34 @@
 /* ============================= */
-/* Global Reset & Common Fonts   */
-/* (These styles apply on all pages) */
+/* Global Variables & Base Styles */
 /* ============================= */
+:root {
+  --primary: #6366f1;
+  --background: #0f172a;
+  --surface: #1e293b;
+  --text: #f8fafc;
+  --accent: #8b5cf6;
+  --card-bg: #273449;
+  --card-hover-bg: #2e3b54;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --transition: 0.3s ease;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
-  /* The font will be inherited; individual pages already load Google Fonts or system fonts via inline links */
 }
 
 /* ============================= */
 /* Index Page Styles             */
-/* (Add class "index-page" to the <body> tag in index.html) */
+/* (Add class "index-page" to <body>) */
 /* ============================= */
 .index-page {
-  background: #0f172a;
-  color: #f8fafc;
+  background: var(--background);
+  color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
 }
@@ -36,13 +48,17 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  background: linear-gradient(45deg, #6366f1, #8b5cf6);
+  background: linear-gradient(45deg, var(--primary), var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+.index-page .subtitle {
+  color: var(--text);
+}
+
 .index-page .scan-form {
-  background: #1e293b;
+  background: var(--surface);
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -60,25 +76,25 @@
   background: #334155;
   border: 2px solid #475569;
   border-radius: 0.5rem;
-  color: #f8fafc;
+  color: var(--text);
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: border-color var(--transition);
 }
 
 .index-page .url-input:focus {
   outline: none;
-  border-color: #6366f1;
+  border-color: var(--primary);
 }
 
 .index-page .analyze-btn {
   padding: 0.75rem 2rem;
-  background: #6366f1;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 0.5rem;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity var(--transition), transform var(--transition);
 }
 
 .index-page .analyze-btn:hover {
@@ -92,9 +108,9 @@
   color: #64748b;
 }
 
-/* Informational Section */
+/* Info Section */
 .index-page .info-section {
-  background: #1e293b;
+  background: var(--surface);
   border-radius: 1rem;
   padding: 1.5rem;
   margin-top: 2rem;
@@ -102,7 +118,7 @@
 
 .index-page .info-section h2 {
   margin-bottom: 1rem;
-  color: #6366f1;
+  color: var(--primary);
   text-align: center;
 }
 
@@ -117,15 +133,15 @@
 }
 
 .index-page .accordion-item {
-  background: #273449;
+  background: var(--card-bg);
   border-radius: 0.5rem;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
 }
 
 .index-page .accordion-item:hover {
   transform: scale(1.02);
-  background-color: #2e3b54;
+  background-color: var(--card-hover-bg);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -143,14 +159,14 @@
 }
 
 .index-page .accordion-header i {
-  transition: transform 0.3s ease;
+  transition: transform var(--transition);
 }
 
 .index-page .accordion-content {
   max-height: 0;
   overflow: hidden;
   padding: 0 1rem;
-  transition: max-height 0.3s ease;
+  transition: max-height var(--transition);
 }
 
 .index-page .accordion-content p {
@@ -159,7 +175,6 @@
   line-height: 1.4;
 }
 
-/* Checkbox hack for accordion */
 .index-page input.accordion-toggle {
   display: none;
 }
@@ -172,15 +187,16 @@
   transform: rotate(180deg);
 }
 
-/* Mobile responsiveness for index-page */
 @media (max-width: 600px) {
   .index-page .input-group {
     flex-direction: column;
   }
+  
   .index-page .url-input,
   .index-page .analyze-btn {
     width: 100%;
   }
+  
   .index-page .analyze-btn {
     margin-top: 1rem;
   }
@@ -188,11 +204,11 @@
 
 /* ============================= */
 /* Results Page Styles           */
-/* (Add class "results-page" to the <body> tag in results.html) */
+/* (Add class "results-page" to <body>) */
 /* ============================= */
 .results-page {
-  background: #0f172a;
-  color: #f8fafc;
+  background: var(--background);
+  color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
 }
@@ -210,14 +226,27 @@
   margin-bottom: 2rem;
 }
 
-.results-page .results-header a.back-btn {
+/* Only the "Results for:" label will be in primary color */
+.results-page .results-label {
+  color: var(--primary);
+}
+
+/* Back to Scanner button with hover effect */
+.results-page .back-btn {
+  color: var(--text);
   text-decoration: none;
-  color: #6366f1;
-  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color var(--transition);
+}
+
+.results-page .back-btn:hover {
+  color: var(--primary);
 }
 
 .results-page .summary-card {
-  background: #1e293b;
+  background: var(--surface);
   border-radius: 1rem;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -229,43 +258,60 @@
 .results-page .metric-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #6366f1;
+  color: var(--primary);
 }
 
+.results-page .metric-label {
+  color: var(--text);
+  opacity: 0.8;
+}
+
+/* Card containing header analysis */
 .results-page .header-card {
-  background: #1e293b;
+  background: var(--surface);
   border-radius: 1rem;
   padding: 1.5rem;
   margin-bottom: 1rem;
   border-left: 4px solid;
 }
 
-.results-page .header-card.high {
-  border-color: #ef4444;
+.results-page .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
 
-.results-page .header-card.medium {
-  border-color: #f59e0b;
+/* Severity text style */
+.results-page .severity {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
 }
 
-.results-page .header-card.low {
-  border-color: #10b981;
-}
+/* Border colors based on severity */
+.results-page .header-card.high { border-color: var(--danger); }
+.results-page .header-card.medium { border-color: var(--warning); }
+.results-page .header-card.low { border-color: var(--success); }
 
 .results-page .status-icon {
   font-size: 1.5rem;
 }
 
-.results-page .status-success {
-  color: #10b981;
+.results-page .status-success { color: var(--success); }
+.results-page .status-warning { color: var(--warning); }
+.results-page .status-danger { color: var(--danger); }
+
+.results-page .current-value,
+.results-page .recommendation {
+  margin-bottom: 1rem;
 }
 
-.results-page .status-warning {
-  color: #f59e0b;
-}
-
-.results-page .status-danger {
-  color: #ef4444;
+.results-page .current-value label,
+.results-page .recommendation label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
 }
 
 .results-page .recommendation {
@@ -280,14 +326,21 @@
   background: rgba(0, 0, 0, 0.3);
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
+  word-break: break-all;
 }
 
-/* Mobile responsiveness for results-page */
+.results-page .score-change {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
 @media (max-width: 600px) {
   .results-page .results-header {
     flex-direction: column;
     align-items: flex-start;
   }
+  
   .results-page .results-header a.back-btn {
     margin-bottom: 1rem;
   }
@@ -295,7 +348,7 @@
 
 /* ============================= */
 /* Error Page Styles             */
-/* (Add class "error-page" to the <body> tag in error.html) */
+/* (Add class "error-page" to <body>) */
 /* ============================= */
 .error-page {
   background: #fff;
@@ -309,5 +362,21 @@
   color: #dc3545;
   padding: 20px;
   border: 1px solid #dc3545;
+  border-radius: 0.5rem;
+  margin: 2rem 0;
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.error-page .error p {
+  margin-top: 0.5rem;
+}
+
+/* ============================= */
+/* Footer Styles (Common)        */
+/* ============================= */
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  color: #64748b;
 }
 
