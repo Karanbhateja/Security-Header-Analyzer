@@ -1,4 +1,4 @@
 # Security-Header-Analyzer
-v0.2.1
+v1.1.0
 
-Added Hover effects on Cards of Index.html
+Added Loading Animation
