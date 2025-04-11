@@ -1,4 +1,4 @@
 # Security-Header-Analyzer
 v1.1.0
 
-Shows Public ip of the visitor in the logs (Not Working)
+Added Loading animation after clicking "scan now" button
