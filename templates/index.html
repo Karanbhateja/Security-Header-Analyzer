@@ -17,6 +17,11 @@
 
 </head>
 <body class="index-page">
+  <!-- Loader Container -->
+  <div class="loader-container">
+    <div class="loader"></div>
+  </div>
+
   <div class="container">
     <header class="header">
       <h1 class="title">Security Header Analyzer</h1>
@@ -116,7 +121,8 @@
       <p>Made with ❤️ by HackDeciphered</p>
     </footer>
   </div>
+  
+  <!-- External JavaScript -->
+  <script src="{{ url_for('static', filename='scripts.js') }}"></script> 
 </body>
 </html>
-
-
